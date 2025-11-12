@@ -6,15 +6,25 @@ const app = express()
 const porta = 3333
 
 app.use(cors())
-
+app.use(express.json())
 
 
 app.get("/", (request, response) => {
     response.json(persons)
 })
 
+app.post("/cadastrar", (request, response) => {
+    const {name, email, age, nickname, password} = request.body.user
+
+    //cadastrar o usuário no banco de dados
+
+    console.log(name, email, age, nickname, password)
+
+    response.status(201).json({message: "Usuário cadastrado com sucesso!"})
+})
+
 //3000, 3001, 3002, 
-app.listen(porta, () => {
+    app.listen(porta, () => {
     console.log(`Servidor rodando na porta: ${porta}!`)
 }) 
 
