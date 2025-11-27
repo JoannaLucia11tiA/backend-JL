@@ -1,6 +1,8 @@
 import express from "express"
 import cors from "cors"
 import { persons } from "./persons.js"
+import mysql from "mysql2"
+
 
 const app = express()
 const porta = 3333
@@ -18,9 +20,17 @@ app.post("/cadastrar", (request, response) => {
 
     //cadastrar o usuário no banco de dados
 
-    console.log(name, email, age, nickname, password)
-
-    response.status(201).json({message: "Usuário cadastrado com sucesso!"})
+    const insertCommand = `
+    INSERT INTO joannalucia_02ma(name, email, age, nickname, password)
+    VALUES (?, ?, ?, ?, ?)
+    `
+    database.query(insertCommand, [name, email, age, nickname, password], (error)=> {
+        if(error){
+        console.log(error)
+        return
+        }
+        response.status(201).json({message: "Usuário cadastrado com sucesso!"})
+    })   
 })
 
 //3000, 3001, 3002, 
@@ -28,7 +38,13 @@ app.post("/cadastrar", (request, response) => {
     console.log(`Servidor rodando na porta: ${porta}!`)
 }) 
 
-
+const database = mysql.createPool({
+    host: "benserverplex.ddns.net",
+    user: "alunos",
+    password: "senhaAlunos",
+    database: "web_02ma",
+    connectionLimit: 10
+})
 
 /*
 import express from "express"
