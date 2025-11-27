@@ -24,6 +24,26 @@ app.get("/", (request, response) => {
    // response.json(persons)
 })
 
+app.post("/login", (request, response)=>{
+    const{email, password} = request.body.user
+
+    const selectCommand = "SELECT * FROM joannalucia_02ma WHERE email = ?"
+    database.query(selectCommand, [email], (error, user)=>{
+        if(error){
+        console.log(error)
+        return
+        }
+
+        if(user.length === 0 || user[0].password !== password){
+            response.json({message: "Usuário ou senha incorretos!"})
+            return
+        }
+
+        response.json({id: user[0].id, name: user[0].name})
+    })
+})
+
+
 app.post("/cadastrar", (request, response) => {
     const {name, email, age, nickname, password} = request.body.user
 
